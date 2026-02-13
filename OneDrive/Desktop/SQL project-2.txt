@@ -1,0 +1,236 @@
+CREATE DATABASE transformer;
+
+USE transformer;
+
+==================================================================
+
+CREATE TABLE Customers(
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    RegistrationDate DATE
+);
+
+==================================================================
+
+CREATE TABLE Orders(
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    OrderDate DATE,
+    TotalAmount DECIMAL(10,2),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+==================================================================
+
+CREATE TABLE Employees(
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Department VARCHAR(50),
+    HireDate DATE,
+    Salary DECIMAL(10,2)
+);
+
+==================================================================
+
+INSERT VALUES IN CUSTOMERS TABLE.
+
+INSERT INTO Customers VALUES
+(1,'Abhishek','Sharma','abhishek@email.com','2022-03-15'),
+(2,'Rohit','Sharma','rohit@email.com','2021-11-02'),
+(3,'Virat','Kohli','virat@email.com','2021-09-22'),
+(4,'Hardik','Pandya','hardik@email.com','2023-05-25'),
+(5,'Kuldeep','Yadav','kuldip@email.com','2024-12-12'),
+(6,'KL','Rahul','klrahul@email.com','2022-07-18'),
+(7,'Shubman','Gill','shubman@email.com','2023-01-10'),
+(8,'Jasprit','Bumrah','bumrah@email.com','2021-06-30'),
+(9,'Ravindra','Jadeja','jadeja@email.com','2020-08-14'),
+(10,'Mohammed','Shami','shami@email.com','2022-12-05');
+
+SELECT * FROM Customers;
+
+==================================================================
+
+INSERT VALUES IN ORDERS TABLE.
+
+INSERT INTO Orders VALUES
+(101,1,'2023-07-01',150.50),
+(102,2,'2023-07-03',200.75),
+(103,3,'2023-08-10',500.00),
+(104,4,'2023-09-12',1200.75),
+(105,5,'2023-10-01',300.25),
+(106,6,'2023-11-05',750.50),
+(107,7,'2023-12-15',450.00),
+(108,8,'2024-01-20',950.80),
+(109,9,'2024-02-14',1100.60),
+(110,10,'2024-03-03',200.00);
+
+SELECT * FROM Orders;
+
+==================================================================
+
+INSERT VALUES IN EMPLOYEES TABLE.
+
+INSERT INTO Employees VALUES
+(1,'Rohit','Mehta','IT','2019-06-12',60000),
+(2,'Anjali','Patel','Finance','2022-02-10',48000),
+(3,'Karan','Shah','Sales','2021-07-05',52000),
+(4,'Priya','Verma','HR','2020-11-20',47000),
+(5,'Amit','Singh','IT','2018-09-15',75000),
+(6,'Neha','Kapoor','Marketing','2023-01-08',43000),
+(7,'Vikas','Yadav','Finance','2022-08-25',58000),
+(8,'Sneha','Joshi','HR','2021-04-18',51000),
+(9,'Rahul','Malhotra','Sales','2019-12-30',62000),
+(10,'Pooja','Desai','Marketing','2023-03-14',45000);
+
+SELECT * FROM Employees;
+
+==================================================================
+
+SELECT * FROM Orders as o
+INNER JOIN Customers as c
+ON o.CustomerID = c.CustomerID;
+
+==================================================================
+
+SELECT *
+FROM Customers as c
+LEFT JOIN Orders as o
+ON c.CustomerID = o.CustomerID;
+
+SELECT *
+FROM Customers as c
+RIGHT JOIN Orders as o
+ON c.CustomerID = o.CustomerID;
+
+==================================================================
+
+SELECT *
+FROM Customers c
+LEFT JOIN Orders o ON c.CustomerID=o.CustomerID
+UNION
+SELECT *
+FROM Customers c
+RIGHT JOIN Orders o ON c.CustomerID=o.CustomerID;
+
+
+==================================================================
+
+SELECT * FROM Orders
+WHERE TotalAmount > (SELECT AVG(TotalAmount) FROM Orders);
+
+==================================================================
+
+SELECT *
+FROM Employees
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+
+==================================================================
+
+SELECT
+YEAR(OrderDate) as Year,
+MONTH(OrderDate) as Month
+FROM Orders;
+
+==================================================================
+
+SELECT
+OrderID,
+OrderDate,
+DATEDIFF(CURDATE(), OrderDate) AS Days_Old
+FROM Orders;
+
+==================================================================
+
+SELECT
+OrderID,
+DATE_FORMAT(OrderDate,'%d-%m-%Y') AS Formatted_Date
+FROM Orders;
+
+==================================================================
+
+SELECT
+CustomerID,
+CONCAT(FirstName,' ',LastName) AS Full_Name
+FROM Customers;
+
+==================================================================
+
+SELECT
+REPLACE(FirstName,'Rohit','Hitman') AS Modified_Name
+FROM Customers;
+
+==================================================================
+
+SELECT 
+UPPER(FirstName) AS Upper_Name,
+LOWER(LastName) AS Lower_Name
+FROM Customers;
+
+
+==================================================================
+
+SELECT CustomerID,
+TRIM(Email) AS Clean_Email
+FROM Customers;
+
+==================================================================
+
+SELECT OrderID, OrderDate, TotalAmount,
+SUM(TotalAmount) OVER (ORDER BY OrderID) AS Running_Total
+FROM Orders;
+
+==================================================================
+
+SELECT OrderID, TotalAmount,
+RANK() OVER (ORDER BY TotalAmount DESC) AS Order_Rank
+FROM Orders;
+
+==================================================================
+
+SELECT OrderID, TotalAmount,
+CASE
+    WHEN TotalAmount > 1000 THEN '10% OFF'
+    WHEN TotalAmount > 500 THEN '5% OFF'
+    ELSE 'No Discount'
+END AS Discount
+FROM Orders;
+
+==================================================================
+
+SELECT EmployeeID, Salary,
+CASE
+    WHEN Salary >= 60000 THEN 'High'
+    WHEN Salary >= 50000 THEN 'Medium'
+    ELSE 'Low'
+END AS Salary_Category
+FROM Employees;
+
+==================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
